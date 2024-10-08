@@ -2,7 +2,7 @@
 import json
 import pandas as pd
 
-from datetime import datetime
+from datetime import date
 from jinja2 import Template
 from data import (
     get_data_aktywne,
@@ -19,14 +19,12 @@ from data import (
 from template import html_template
 
 def format_date():
-    date = datetime(2024, 9, 12)  # Set a static date
-    #options = { 'weekday': 'long' }
-    year = date.year
-    month = str(date.month).zfill(2)
-    day = str(date.day).zfill(2)
-    weekday = date.strftime('%A')
+    today = date.today()
+    year = today.year
+    month = str(today.month).zfill(2)
+    day = str(today.day).zfill(2)
+    weekday = today.strftime('%A')
 
-    # Translate the weekday to Polish
     polish_weekdays = {
         'Monday': 'Poniedziałek',
         'Tuesday': 'Wtorek',
@@ -53,14 +51,13 @@ def main():
     ranking_data = get_data_ranking()
     table_ava = get_data_table_ava()
 
-    # Rendering the template with data
     template = Template(html_template)
     html_output = template.render(
         data_aktywne=data_aktywne,
         data_nieaktywne=data_nieaktywne,
         data_nowosci=data_nowosci,
         data_wszystko=data_wszystko,
-        formatted_date=formatted_date,  # Pass the static date to the template
+        formatted_date=formatted_date, 
         klasyfikacja_data=klasyfikacja_data,
         statusy_data=statusy_data,
         zejscie_data=zejscie_data,
@@ -69,7 +66,6 @@ def main():
         table_ava=table_ava
     )
 
-    # Save the HTML output to a file with UTF-8 encoding
     with open('report_availability.html', 'w', encoding='utf-8') as f:
         f.write(html_output)
 
