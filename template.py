@@ -255,8 +255,15 @@ html_template = """
         const dataKlasyfikacja = {{ klasyfikacja_data }};
         const dataStatusy = {{ statusy_data }};
         const dataZejscie = {{ zejscie_data }};
-        const dataSuperkat = {{ superkat_data }};
-        const dataRanking = {{ ranking_data }};
+        const dataSuperkatAkt = {{ superkatakt_data }};
+        const dataSuperkatNie = {{ superkatnie_data }};
+        const dataSuperkatNow = {{ superkatnow_data }};
+        const dataSuperkatWsz = {{ superkatwsz_data }};
+        const dataRankingAkt = {{ rankingakt_data }};
+        const dataRankingNie = {{ rankingnie_data }};
+        const dataRankingNow = {{ rankingnow_data }};
+        const dataRankingWsz = {{ rankingwsz_data }};
+        
 
         let doughnutCharts = [];
         let lineCharts = [];
@@ -443,22 +450,41 @@ html_template = """
             });
         }
 
+        function updateTable(data) {
+            const tableBody = document.querySelector('table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.datasets[0].data.forEach((rowData, index) => {
+                const row = document.createElement('tr');
+                data.datasets.forEach((dataset) => {
+                    const cell = document.createElement('td');
+                    cell.textContent = dataset.data[index];
+                    row.appendChild(cell);
+                });
+                tableBody.appendChild(row);
+            });
+        }
+
         window.onload = function() {
             createCharts(dataWszystko);
             createLineChart([dataKlasyfikacja, dataStatusy, dataZejscie]);
-            createBarChart([dataSuperkat,dataRanking]); 
+            createBarChart([dataSuperkatWsz,dataRankingWsz]); 
 
             document.getElementById('btnAktywne').addEventListener('click', function() {
                 createCharts(dataAktywne);
+                createBarChart([dataSuperkatAkt,dataRankingAkt]); 
             });
             document.getElementById('btnNieaktywne').addEventListener('click', function() {
                 createCharts(dataNieaktywne);
+                createBarChart([dataSuperkatNie,dataRankingNie]); 
             });
             document.getElementById('btnNowosci').addEventListener('click', function() {
                 createCharts(dataNowosci);
+                createBarChart([dataSuperkatNow,dataRankingNow]); 
             });
             document.getElementById('btnWszystko').addEventListener('click', function() {
                 createCharts(dataWszystko);
+                createBarChart([dataSuperkatWsz,dataRankingWsz]); 
             });
         };
     </script>

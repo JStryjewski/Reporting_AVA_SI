@@ -4,17 +4,8 @@ import pandas as pd
 
 from datetime import date
 from jinja2 import Template
-from data import (
-    get_data_aktywne,
-    get_data_nieaktywne,
-    get_data_nowosci,
-    get_data_wszystko,
-    get_data_klasyfikacja,
-    get_data_ranking,
-    get_data_statusy,
-    get_data_superkat,
-    get_data_table_ava,
-    get_data_zejscie
+from data1 import (
+    get_all_data
 )
 from template import html_template
 
@@ -40,30 +31,30 @@ def format_date():
 
 def main():
     formatted_date = format_date()
-    data_aktywne = get_data_aktywne()
-    data_nieaktywne = get_data_nieaktywne()
-    data_nowosci = get_data_nowosci()
-    data_wszystko = get_data_wszystko()
-    klasyfikacja_data = get_data_klasyfikacja()
-    statusy_data = get_data_statusy()
-    zejscie_data = get_data_zejscie()
-    superkat_data = get_data_superkat()
-    ranking_data = get_data_ranking()
-    table_ava = get_data_table_ava()
+    dict_data = get_all_data(source='file')
 
     template = Template(html_template)
     html_output = template.render(
-        data_aktywne=data_aktywne,
-        data_nieaktywne=data_nieaktywne,
-        data_nowosci=data_nowosci,
-        data_wszystko=data_wszystko,
+        data_aktywne=dict_data[0]['AKTYWNE'],
+        data_nieaktywne=dict_data[0]['NIEAKTYWNE'],
+        data_nowosci=dict_data[0]['NOWOŚĆ'],
+        data_wszystko=dict_data[0]['WSZYSTKO'],
         formatted_date=formatted_date, 
-        klasyfikacja_data=klasyfikacja_data,
-        statusy_data=statusy_data,
-        zejscie_data=zejscie_data,
-        superkat_data=superkat_data,
-        ranking_data=ranking_data,
-        table_ava=table_ava
+        klasyfikacja_data=dict_data[1],
+        statusy_data=dict_data[2],
+        zejscie_data=dict_data[3],
+        superkatakt_data=dict_data[4]['AKTYWNE'],
+        superkatnie_data=dict_data[4]['NIEAKTYWNE'],
+        superkatnow_data=dict_data[4]['NOWOŚĆ'],
+        superkatwsz_data=dict_data[4]['WSZYSTKO'],
+        rankingakt_data=dict_data[5]['AKTYWNE'],
+        rankingnie_data=dict_data[5]['NIEAKTYWNE'],
+        rankingnow_data=dict_data[5]['NOWOŚĆ'],
+        rankingwsz_data=dict_data[5]['WSZYSTKO'],
+        tableakt_ava=dict_data[6]['AKTYWNE'],
+        tablenie_ava=dict_data[6]['NIEAKTYWNE'],
+        tablenow_ava=dict_data[6]['NOWOŚĆ'],
+        tablewsz_ava=dict_data[6]['WSZYSTKO']
     )
 
     with open('report_availability.html', 'w', encoding='utf-8') as f:
