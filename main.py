@@ -4,7 +4,7 @@ import pandas as pd
 
 from datetime import date
 from jinja2 import Template
-from data1 import (
+from data import (
     get_all_data
 )
 from template import html_template
@@ -51,10 +51,10 @@ def main():
         rankingnie_data=dict_data[5]['NIEAKTYWNE'],
         rankingnow_data=dict_data[5]['NOWOŚĆ'],
         rankingwsz_data=dict_data[5]['WSZYSTKO'],
-        tableakt_ava=dict_data[6]['AKTYWNE'],
-        tablenie_ava=dict_data[6]['NIEAKTYWNE'],
-        tablenow_ava=dict_data[6]['NOWOŚĆ'],
-        tablewsz_ava=dict_data[6]['WSZYSTKO']
+        table_ava=dict_data[6]['WSZYSTKO'],  # Default data
+        table_ava_aktywne=dict_data[6]['AKTYWNE'],  # New data for aktywne
+        table_ava_nieaktywne=dict_data[6]['NIEAKTYWNE'],  # New data for nieaktywne
+        table_ava_nowosci=dict_data[6]['NOWOŚĆ']  # New data for nowości
     )
 
     with open('report_availability.html', 'w', encoding='utf-8') as f:

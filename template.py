@@ -263,6 +263,11 @@ html_template = """
         const dataRankingNie = {{ rankingnie_data }};
         const dataRankingNow = {{ rankingnow_data }};
         const dataRankingWsz = {{ rankingwsz_data }};
+
+        const tbAktywne = {{ table_ava_aktywne }};
+        const tbNieaktywne = {{ table_ava_nieaktywne }};
+        const tbNowosci = {{ table_ava_nowosci }};
+        const tbWszystko = {{ table_ava }};  // Default data
         
 
         let doughnutCharts = [];
@@ -312,6 +317,26 @@ html_template = """
 
             XLSX.writeFile(wb, "DostepnoscSI_report.xlsx");
             }
+        
+        function updateTable(data) {
+            const tbody = document.querySelector('table tbody');
+            let rowsHtml = '';  // Create a single string to hold all rows
+
+            const numRows = data.labels.length;
+            for (let i = 0; i < numRows; i++) {
+                rowsHtml += `<tr>
+                    <td>${data.datasets[0].data[i]}</td>
+                    <td>${data.datasets[1].data[i]}</td>
+                    <td>${data.datasets[2].data[i]}</td>
+                    <td>${data.datasets[3].data[i]}%</td>
+                    <td>${data.datasets[4].data[i]}</td>
+                    <td>${data.datasets[5].data[i]}</td>
+                    <td>${data.datasets[6].data[i]}%</td>
+                </tr>`;
+            }
+
+            tbody.innerHTML = rowsHtml;  // Update all rows at once
+        }
    
         function createCharts(data) {
             const labels = ['Dostępne', 'Niedostępne'];
@@ -450,41 +475,31 @@ html_template = """
             });
         }
 
-        function updateTable(data) {
-            const tableBody = document.querySelector('table tbody');
-            tableBody.innerHTML = ''; // Clear existing rows
-
-            data.datasets[0].data.forEach((rowData, index) => {
-                const row = document.createElement('tr');
-                data.datasets.forEach((dataset) => {
-                    const cell = document.createElement('td');
-                    cell.textContent = dataset.data[index];
-                    row.appendChild(cell);
-                });
-                tableBody.appendChild(row);
-            });
-        }
-
         window.onload = function() {
             createCharts(dataWszystko);
             createLineChart([dataKlasyfikacja, dataStatusy, dataZejscie]);
             createBarChart([dataSuperkatWsz,dataRankingWsz]); 
+            updateTable(tbWszystko);
 
             document.getElementById('btnAktywne').addEventListener('click', function() {
                 createCharts(dataAktywne);
                 createBarChart([dataSuperkatAkt,dataRankingAkt]); 
+                updateTable(tbAktywne); 
             });
             document.getElementById('btnNieaktywne').addEventListener('click', function() {
                 createCharts(dataNieaktywne);
-                createBarChart([dataSuperkatNie,dataRankingNie]); 
+                createBarChart([dataSuperkatNie,dataRankingNie]);
+                updateTable(tbNieaktywne); 
             });
             document.getElementById('btnNowosci').addEventListener('click', function() {
                 createCharts(dataNowosci);
                 createBarChart([dataSuperkatNow,dataRankingNow]); 
+                updateTable(tbNowosci);
             });
             document.getElementById('btnWszystko').addEventListener('click', function() {
                 createCharts(dataWszystko);
                 createBarChart([dataSuperkatWsz,dataRankingWsz]); 
+                updateTable(tbWszystko);
             });
         };
     </script>
@@ -589,17 +604,6 @@ html_template = """
             </tr>
         </thead>
         <tbody>
-            {% for i in range(table_ava['labels']|length) %}
-            <tr>
-                <td>{{ table_ava['datasets'][0]['data'][i] }}</td>
-                <td>{{ table_ava['datasets'][1]['data'][i] }}</td>
-                <td>{{ table_ava['datasets'][2]['data'][i] }}</td>
-                <td>{{ table_ava['datasets'][3]['data'][i] }}%</td>
-                <td>{{ table_ava['datasets'][4]['data'][i] }}</td>
-                <td>{{ table_ava['datasets'][5]['data'][i] }}</td>
-                <td>{{ table_ava['datasets'][6]['data'][i] }}%</td>
-            </tr>
-            {% endfor %}
         </tbody>
     </table>
 </body>
