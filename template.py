@@ -509,7 +509,7 @@ html_template = """
     <header class="header">
         <div class="date">{{formatted_date}}</div>
         <h1>Raport Dostępności</h1>
-        <img src="https://higrupa.pl/wp-content/uploads/2016/08/natura-drogerie-logo-biale-poprawne.png" alt="Logo">
+        <img src="https://raw.githubusercontent.com/JStryjewski/Reporting_AVA_SI/main/logo.png" alt="Logo">
     </header>
 
     <h2>Klasyfikacja według: Top 100 - Top >2000 - Klasyfikacji A/B/C</h2>
